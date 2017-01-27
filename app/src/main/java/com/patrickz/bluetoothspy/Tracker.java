@@ -7,15 +7,16 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 import static android.content.Context.LOCATION_SERVICE;
 
 public class Tracker
 {
     private final static String LOGTAG = "MainLocation";
-
     private Context context;
+
+    public static JSONObject json = new JSONObject();
 
     public Tracker(Context context)
     {
@@ -26,24 +27,20 @@ public class Tracker
 
     private void buildJson(Location location)
     {
-        JSONObject json = new JSONObject();
-
         double latitude  = location.getLatitude();
-        double longitude = location.getLatitude();
+        double longitude = location.getLongitude();
 
 //        Log.d(LOGTAG, "Latitude:  " + latitude);
 //        Log.d(LOGTAG, "Longitude: " + longitude);
 
-        SimpleJson.put(json, "Latitude",  latitude);
-        SimpleJson.put(json, "Longitude", longitude);
+        json.put("Latitude",  latitude);
+        json.put("Longitude", longitude);
 
-        SimpleJson.put(json, "Accuracy", location.getAccuracy());
-        // SimpleJson.put(json, "Provider", location.getProvider());
-        SimpleJson.put(json, "Speed",    location.getSpeed());
-        SimpleJson.put(json, "Time",     location.getTime());
+        json.put("Accuracy", location.getAccuracy());
+        json.put("Speed", location.getSpeed());
+        json.put("Time", location.getTime());
 
-        Log.d(LOGTAG, SimpleJson.toString(json, 2));
-
+        Log.d(LOGTAG, json.toString(2));
     }
 
     private void locate()
@@ -83,8 +80,8 @@ public class Tracker
 
         try
         {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
         catch (SecurityException exc)
         {

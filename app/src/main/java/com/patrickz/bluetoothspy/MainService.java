@@ -11,6 +11,7 @@ public class MainService extends Service
 {
     private final static String LOGTAG = "MainService";
     private boolean mRunning;
+    private BluetoothSnitch snitch;
 
     @Override
     public void onCreate()
@@ -18,7 +19,7 @@ public class MainService extends Service
         super.onCreate();
         mRunning = false;
 
-//        BluetoothSnitch snitch = new BluetoothSnitch(this);
+        snitch = new BluetoothSnitch(this);
     }
 
     @Override
@@ -34,6 +35,8 @@ public class MainService extends Service
 
         Toast.makeText(this, "My Service Stopped", Toast.LENGTH_LONG).show();
         Log.d(LOGTAG, "onDestroy");
+
+        mRunning = false;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class MainService extends Service
 
         Tracker location = new Tracker(this.getBaseContext());
 
-//        testThread();
+        testThread();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -63,12 +66,14 @@ public class MainService extends Service
                 int count = 0;
                 while (true)
                 {
-                    Log.d(LOGTAG, "test: " + count);
+                    Log.d(LOGTAG, "Scan: " + count);
                     count++;
+
+                    snitch.start();
 
                     try
                     {
-                        Thread.sleep(3000);
+                        Thread.sleep(10000);
                     }
                     catch (InterruptedException e)
                     {

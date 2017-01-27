@@ -6,37 +6,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.ParcelUuid;
 import android.util.Log;
 
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 public class BluetoothSnitch
 {
     public static JSONObject data = new JSONObject();
+    public static boolean scanAtive = false;
 
-
+    private Context context;
     private final static String LOGTAG = "MainBluetoothSnitch";
-
-//    private final BroadcastReceiver mReceiver = new BroadcastReceiver()
-//    {
-//        @Override
-//        public void onReceive(Context context, Intent intent)
-//        {
-//            String action = intent.getAction();
-//
-//            if (BluetoothDevice.ACTION_FOUND.equals(action))
-//            {
-//                // Discovery has found a device. Get the BluetoothDevice
-//                // object and its info from the Intent.
-//                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-//                String deviceName = device.getName();
-//                String deviceHardwareAddress = device.getAddress(); // MAC address
-//
-//                Log.d(LOGTAG, "deviceName:            " + deviceName);
-//                Log.d(LOGTAG, "deviceHardwareAddress: " + deviceHardwareAddress);
-//            }
-//        }
-//    };
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver()
     {
@@ -45,35 +26,33 @@ public class BluetoothSnitch
         {
             String action = intent.getAction();
 
-            Log.d(LOGTAG, action);
+            // Log.d(LOGTAG, action);
 
-            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action))
+            if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_STARTED))
             {
-                //discovery starts, we can show progress dialog or perform other tasks
+                scanAtive = true;
             }
 
-            if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
+            if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED))
             {
-                //discovery finishes, dismis progress dialog
+                scanAtive = false;
             }
 
-            if (BluetoothDevice.ACTION_FOUND.equals(action))
+            if (action.equals(BluetoothDevice.ACTION_FOUND))
             {
-                //bluetooth device found
-                BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+//                ParcelUuid[] uuid = device.getUuids();
 
                 Log.d(LOGTAG, "deviceName: " + device.getName());
-                SimpleJson.put(data, device.getName(), device.getAddress());
+                data.put(device.getName(), device.getAddress());
             }
         }
     };
 
-    BluetoothSnitch(MainService service)
+    public void start()
     {
-        Log.d(LOGTAG, "BluetoothSnitch");
-
-//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//        service.registerReceiver(mReceiver, filter);
+        Log.d(LOGTAG, "start scan");
 
         IntentFilter filter = new IntentFilter();
 
@@ -83,26 +62,13 @@ public class BluetoothSnitch
 
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
-        service.registerReceiver(mReceiver, filter);
+        context.registerReceiver(mReceiver, filter);
         adapter.startDiscovery();
     }
 
-    BluetoothSnitch(MainActivity activity)
+    BluetoothSnitch(Context context)
     {
         Log.d(LOGTAG, "BluetoothSnitch");
-
-//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//        service.registerReceiver(mReceiver, filter);
-
-        IntentFilter filter = new IntentFilter();
-
-        filter.addAction(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-
-        activity.registerReceiver(mReceiver, filter);
-        adapter.startDiscovery();
+        this.context = context;
     }
 }

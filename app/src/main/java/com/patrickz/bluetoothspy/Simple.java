@@ -29,4 +29,16 @@ public class Simple
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    public static void sleep(int millis)
+    {
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+        }
+    }
 }
