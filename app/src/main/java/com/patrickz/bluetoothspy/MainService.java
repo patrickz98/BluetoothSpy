@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 public class MainService extends Service
 {
-    private final static String LOGTAG = "MainService";
+    private final static String LOGTAG = MainActivity.LOGMARKER + "MainService";
     private boolean mRunning;
     private BluetoothSnitch snitch;
 

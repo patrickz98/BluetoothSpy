@@ -4,10 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
-/**
- * Created by patrick on 26/01/17.
- */
-
 public class Simple
 {
     public static void showOkDialog(Context context, String message)

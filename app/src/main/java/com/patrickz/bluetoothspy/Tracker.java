@@ -13,7 +13,7 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class Tracker
 {
-    private final static String LOGTAG = "MainLocation";
+    private final static String LOGTAG = MainActivity.LOGMARKER + "Tracker";
     private Context context;
 
     public static JSONObject json = new JSONObject();
@@ -80,8 +80,8 @@ public class Tracker
 
         try
         {
-            // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }
         catch (SecurityException exc)
         {

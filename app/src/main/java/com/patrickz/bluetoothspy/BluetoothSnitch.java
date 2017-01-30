@@ -13,11 +13,13 @@ import org.json.simple.JSONObject;
 
 public class BluetoothSnitch
 {
+    private final static String LOGTAG = MainActivity.LOGMARKER + "BluetoothSnitch";
+
     public static JSONObject data = new JSONObject();
     public static boolean scanAtive = false;
 
     private Context context;
-    private final static String LOGTAG = "MainBluetoothSnitch";
+    private DataManager dataManager;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver()
     {
@@ -36,16 +38,19 @@ public class BluetoothSnitch
             if (action.equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED))
             {
                 scanAtive = false;
+
+                dataManager.add(data);
+                // dataManager.printAll();
             }
 
             if (action.equals(BluetoothDevice.ACTION_FOUND))
             {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-//                ParcelUuid[] uuid = device.getUuids();
+                // ParcelUuid[] uuid = device.getUuids();
 
                 Log.d(LOGTAG, "deviceName: " + device.getName());
-                data.put(device.getName(), device.getAddress());
+                data.put(device.getAddress(), device.getName());
             }
         }
     };
@@ -59,6 +64,7 @@ public class BluetoothSnitch
         filter.addAction(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -69,6 +75,8 @@ public class BluetoothSnitch
     BluetoothSnitch(Context context)
     {
         Log.d(LOGTAG, "BluetoothSnitch");
+
         this.context = context;
+        this.dataManager = new DataManager(context);
     }
 }

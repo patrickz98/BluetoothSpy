@@ -31,7 +31,8 @@ import org.json.simple.JSONObject;
 //public class MainActivity extends AppCompatActivity
 public class MainActivity extends Activity
 {
-    private final static String LOGTAG = "MainActivity";
+    public final static String LOGMARKER = "PZLog-";
+    private final static String LOGTAG = LOGMARKER + "MainActivity";
     private LinearLayout scrollLayout;
     private RelativeLayout.LayoutParams layout;
 
@@ -172,7 +173,7 @@ public class MainActivity extends Activity
 
         createGUI();
 
-        Intent msgIntent = new Intent(this, MainService.class);
+        Intent msgIntent = new Intent(getApplicationContext(), MainService.class);
         this.startService(msgIntent);
 
 //        BluetoothSnitch snitch = new BluetoothSnitch(this);
@@ -189,7 +190,7 @@ public class MainActivity extends Activity
                     count++;
 
                     receiveMyMessage();
-                    Simple.sleep(2000);
+                    Simple.sleep(1000);
                 }
             }
         }).start();

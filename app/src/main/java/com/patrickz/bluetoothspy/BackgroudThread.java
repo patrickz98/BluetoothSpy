@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 public class BackgroudThread extends Thread
 {
-    private final static String LOGTAG = "MainBackgroudThread";
+    private final static String LOGTAG = MainActivity.LOGMARKER + "BackgroudThread";
 
     private Context context = null;
     private int count = 0;

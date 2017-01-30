@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 public class MainBroadcastReceiver extends BroadcastReceiver
 {
-    private final static String LOGTAG = "MainBroadcastReceiver";
+    private final static String LOGTAG = MainActivity.LOGMARKER + "BroadcastReceiver";
 
     @Override
     public void onReceive(Context context, Intent arg1)
