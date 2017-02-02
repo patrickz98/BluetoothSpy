@@ -3,38 +3,54 @@ package com.patrickz.bluetoothspy;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toolbar;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.util.ArrayList;
 
 //import org.json.JSONObject;
 
-//public class MainActivity extends AppCompatActivity
-public class MainActivity extends Activity
+public class MainActivity extends AppCompatActivity
+//public class MainActivity extends Activity
 {
     public final static String LOGMARKER = "PZLog-";
     private final static String LOGTAG = LOGMARKER + "MainActivity";
     private LinearLayout scrollLayout;
     private RelativeLayout.LayoutParams layout;
+
+    private Toolbar myToolbar;
 
     private void refesh()
     {
@@ -121,7 +137,7 @@ public class MainActivity extends Activity
 
         this.setContentView(linLayout, linLayoutParam);
 
-        Toolbar myToolbar = new Toolbar(this);
+        myToolbar = new Toolbar(this);
         myToolbar.setTitleTextColor(Color.parseColor("#ffffff"));
         myToolbar.setBackgroundColor(Color.parseColor("#7C25F8"));
 
@@ -129,7 +145,8 @@ public class MainActivity extends Activity
         menu.add("Add Test");
 
         linLayout.addView(myToolbar);
-        setActionBar(myToolbar);
+//        setActionBar(myToolbar);
+        setSupportActionBar(myToolbar);
 
 //        HorizontalScrollView scroll = new HorizontalScrollView(this);
         ScrollView scroll = new ScrollView(this);
@@ -168,6 +185,9 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
 
+        ContactManager contact = new ContactManager(this);
+        contact.main();
+
         Log.d(LOGTAG, "Hello World!");
         Toast.makeText(this, "Hello World!", Toast.LENGTH_LONG).show();
 
@@ -186,7 +206,7 @@ public class MainActivity extends Activity
                 int count = 0;
                 while (true)
                 {
-                    Log.d(LOGTAG, "Refesh: " + count);
+                    // Log.d(LOGTAG, "Refesh: " + count);
                     count++;
 
                     receiveMyMessage();

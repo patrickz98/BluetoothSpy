@@ -19,7 +19,7 @@ public class MainService extends Service
         super.onCreate();
         mRunning = false;
 
-        snitch = new BluetoothSnitch(this);
+        // snitch = new BluetoothSnitch(this);
     }
 
     @Override
@@ -49,9 +49,9 @@ public class MainService extends Service
         Toast.makeText(this, "My Service Started", Toast.LENGTH_LONG).show();
         Log.d(LOGTAG, "onStart");
 
-        Tracker location = new Tracker(this.getBaseContext());
+        // Tracker location = new Tracker(this.getBaseContext());
 
-        testThread();
+        // testThread();
 
         return super.onStartCommand(intent, flags, startId);
     }

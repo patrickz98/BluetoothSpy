@@ -21,6 +21,14 @@ public class BluetoothSnitch
     private Context context;
     private DataManager dataManager;
 
+    BluetoothSnitch(Context context)
+    {
+        Log.d(LOGTAG, "BluetoothSnitch");
+
+        this.context = context;
+        this.dataManager = new DataManager(context);
+    }
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver()
     {
         @Override
@@ -57,7 +65,7 @@ public class BluetoothSnitch
 
     public void start()
     {
-        Log.d(LOGTAG, "start scan");
+        // Log.d(LOGTAG, "start scan");
 
         IntentFilter filter = new IntentFilter();
 
@@ -70,13 +78,5 @@ public class BluetoothSnitch
 
         context.registerReceiver(mReceiver, filter);
         adapter.startDiscovery();
-    }
-
-    BluetoothSnitch(Context context)
-    {
-        Log.d(LOGTAG, "BluetoothSnitch");
-
-        this.context = context;
-        this.dataManager = new DataManager(context);
     }
 }
